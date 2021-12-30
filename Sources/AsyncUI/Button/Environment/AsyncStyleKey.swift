@@ -1,14 +1,21 @@
 import SwiftUI
 
 /// Environment key for async style
-struct AsyncStyleKey: EnvironmentKey {
-  static var defaultValue: AnyModifier? = AnyModifier(DefaultAsyncStyle())
+struct DefaultAsyncStyleKey: EnvironmentKey {
+  static var defaultValue: Bool = true
 }
 
 extension EnvironmentValues {
-  /// a default view style to apply on an async view
-  public var defaultAsyncStyle: AnyModifier? {
-    get { self[AsyncStyleKey.self] }
-    set { self[AsyncStyleKey.self] = newValue }
+  /// a boolean indicating whether default async style should be applied on the view
+  public var defaultAsyncStyleEnabled: Bool {
+    get { self[DefaultAsyncStyleKey.self] }
+    set { self[DefaultAsyncStyleKey.self] = newValue }
+  }
+}
+
+extension View {
+  public func enableDefaultAsyncStyle(_ enable: Bool) -> some View {
+    self
+      .environment(\.defaultAsyncStyleEnabled, enable)
   }
 }

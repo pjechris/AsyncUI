@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-/// A button executing an asynchronous action on tap
+/// A button executing a `Publisher` action on tap
 public struct AsyncButton<Label: View, P: Publisher>: View {
   public let action: () -> P
   @ViewBuilder public let label: Label
@@ -9,17 +9,15 @@ public struct AsyncButton<Label: View, P: Publisher>: View {
   @State var cancellables: Set<AnyCancellable> = Set()
   @State var isExecuting = false
   
-  @Environment(\.defaultAsyncStyle) var style
-  
   public var body: some View {
     Button(
       action: executeAction,
-      label: { label.modifier(style ?? AnyModifier(EmptyModifier())) }
+      label: { label.modifier(DefaultAsyncStyle()) }
     )
       .disabled(isExecuting)
   }
   
-  func executeAction() {
+  private func executeAction() {
     isExecuting = true
     
     action()
@@ -44,6 +42,7 @@ struct AsyncButton_Previews: PreviewProvider {
       )
         .background(Color.blue)
         .foregroundColor(.black)
+        .previewDisplayName("action not running")
       
       AsyncButton(
         action: { Just("Nothing") },
@@ -52,6 +51,7 @@ struct AsyncButton_Previews: PreviewProvider {
         isExecuting: true
       )
         .background(Color.red)
+        .previewDisplayName("action running")
     }
     .previewLayout(.sizeThatFits)
   }
