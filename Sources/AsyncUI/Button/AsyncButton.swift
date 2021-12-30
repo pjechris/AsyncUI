@@ -3,24 +3,25 @@ import Combine
 
 /// A button executing an asynchronous action on tap
 public struct AsyncButton<Label: View, P: Publisher>: View {
-  let action: () -> P
-  let label: Label
-
+  public let action: () -> P
+  @ViewBuilder public let label: Label
+  
   @State var cancellables: Set<AnyCancellable> = Set()
   @State var isExecuting = false
+  
   @Environment(\.defaultAsyncStyle) var style
-
+  
   public var body: some View {
     Button(
       action: executeAction,
       label: { label.modifier(style ?? AnyModifier(EmptyModifier())) }
     )
-    .disabled(isExecuting)
+      .disabled(isExecuting)
   }
-
+  
   func executeAction() {
     isExecuting = true
-
+    
     action()
       .sink(
         receiveCompletion: { _ in
@@ -37,16 +38,16 @@ struct AsyncButton_Previews: PreviewProvider {
     Group {
       AsyncButton(
         action: { Just("Nothing") },
-        label: Text("test"),
+        label: { Text("test") },
         cancellables: [],
         isExecuting: false
       )
         .background(Color.blue)
         .foregroundColor(.black)
-
+      
       AsyncButton(
         action: { Just("Nothing") },
-        label: Text("test"),
+        label: { Text("test") },
         cancellables: [],
         isExecuting: true
       )
