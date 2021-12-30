@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 
 /// A button executing a `Publisher` action on tap
-public struct AsyncButton<Label: View, P: Publisher>: View {
+public struct AsyncPublisherButton<Label: View, P: Publisher>: View {
   public let action: () -> P
   @ViewBuilder public let label: Label
   
@@ -34,7 +34,7 @@ public struct AsyncButton<Label: View, P: Publisher>: View {
 struct AsyncButton_Previews: PreviewProvider {
   static var previews: some View {
     Group {
-      AsyncButton(
+      AsyncPublisherButton(
         action: { Just("Nothing") },
         label: { Text("test") },
         cancellables: [],
@@ -44,7 +44,7 @@ struct AsyncButton_Previews: PreviewProvider {
         .foregroundColor(.black)
         .previewDisplayName("action not running")
       
-      AsyncButton(
+      AsyncPublisherButton(
         action: { Just("Nothing") },
         label: { Text("test") },
         cancellables: [],
