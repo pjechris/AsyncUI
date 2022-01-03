@@ -4,20 +4,25 @@ import Combine
 /// A button executing a `Publisher` action on tap
 public struct AsyncPublisherButton<Label: View, P: Publisher>: View {
   public let action: () -> P
-  @ViewBuilder public let label: Label
+  @ViewBuilder public let label: () -> Label
   
-  @State var cancellables: Set<AnyCancellable> = Set()
+  @State var cancellables: Set<AnyCancellable> = []
   @State var isExecuting = false
   
-  public var body: some View {
-    Button(
-      action: executeAction,
-      label: { label.modifier(DefaultAsyncStyle()) }
-    )
-      .disabled(isExecuting)
+  public init(action: @escaping () -> P, @ViewBuilder label: @escaping () -> Label) {
+    self.action = action
+    self.label = label
   }
   
-  private func executeAction() {
+  public var body: some View {
+    Button(action: runAction) {
+      label().modifier(DefaultAsyncStyle())
+    }
+    .disabled(isExecuting)
+    .environment(\.isExecuting, isExecuting)
+  }
+  
+  private func runAction() {
     isExecuting = true
     
     action()
@@ -31,27 +36,16 @@ public struct AsyncPublisherButton<Label: View, P: Publisher>: View {
   }
 }
 
-struct AsyncButton_Previews: PreviewProvider {
+struct AsyncPublisherButton_Previews: PreviewProvider {
   static var previews: some View {
     Group {
       AsyncPublisherButton(
         action: { Just("Nothing") },
-        label: { Text("test") },
-        cancellables: [],
-        isExecuting: false
+        label: { Text("test") }
       )
         .background(Color.blue)
         .foregroundColor(.black)
         .previewDisplayName("action not running")
-      
-      AsyncPublisherButton(
-        action: { Just("Nothing") },
-        label: { Text("test") },
-        cancellables: [],
-        isExecuting: true
-      )
-        .background(Color.red)
-        .previewDisplayName("action running")
     }
     .previewLayout(.sizeThatFits)
   }
