@@ -34,7 +34,7 @@ public class Action<Input, Output>: ObservableObject {
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.isExecuting = true },
                 receiveCompletion: { [weak self] _ in self?.isExecuting = false },
-                receiveCancel: { [weak self] _ in self?.isExecuting = false }
+                receiveCancel: { [weak self] in self?.isExecuting = false }
             )
             .sink(
                 receiveCompletion: { [weak self] in
