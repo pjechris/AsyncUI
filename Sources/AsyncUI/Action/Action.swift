@@ -9,10 +9,9 @@ public class Action<Input, Output>: ObservableObject {
     private let action: (Input) -> AnyPublisher<Output, Error>
     private var cancellables: Set<AnyCancellable> = []
     
-    public init<P: Publisher>(
-        canExecute: AnyPublisher<Bool, Never> = Just(true).eraseToAnyPublisher(),
-        execute: @escaping (Input) -> P
-    ) where P.Output == Output, P.Failure == Error {
+    public init<K: Publisher, P: Publisher>(canExecute: K, execute: @escaping (Input) -> P)
+    where K.Output == Bool, K.Failure == Never, P.Output == Output, P.Failure == Error {
+        
         self.action = { execute($0).eraseToAnyPublisher() }
         
         canExecute
@@ -20,10 +19,11 @@ public class Action<Input, Output>: ObservableObject {
             .store(in: &cancellables)
     }
     
-    public convenience init<T: Publisher, P: Publisher>(canExecute: T, execute: @escaping (Input) -> P)
-    where T.Output == Bool, T.Failure == Never, P.Output == Output, P.Failure == Error {
-        self.init(canExecute: canExecute.eraseToAnyPublisher(), execute: execute)
+    public convenience init<P: Publisher>(execute: @escaping (Input) -> P) where P.Output == Output, P.Failure == Error {
+        self.init(canExecute: Just(true).eraseToAnyPublisher(), execute: execute)
     }
+    
+    
     
     public func callAsFunction(_ input: Input) {
         guard canExecute && !isExecuting else {
