@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-/// Represents a value that accept an action taking `Input` as its input and
+/// Represent a value that accept an action taking `Input` as its input and
 /// producing an `Output` when executed.
 ///
 /// Example: Create an action running only if user has permission
@@ -36,8 +36,15 @@ public class InputAction<Input, Output>: ObservableObject {
     /// the last result from the action
     @Published public private(set) var result: Result<Output, Error>?
     
+    /// true when the action can be execute and none is currently running
+    public var isEnabled: Bool { canExecute && !isExecuting }
+    
     private let action: (Input) -> AnyPublisher<Output, Error>
     private var cancellables: Set<AnyCancellable> = []
+    
+    /// Tell when the action finished instantation and is ready for execution.
+    /// This is needed because listeners are deferred on RunLoop so we have a delay before receiving values such `canExecute`
+    @Published private var isReadyToExecute = false
     
     /// init the action by supplying when it is enabled or not and the closure to run
     /// - Parameter canExecute: a publisher indicating whenever the action is enabled or not
@@ -46,9 +53,14 @@ public class InputAction<Input, Output>: ObservableObject {
     where K.Output == Bool, K.Failure == Never, P.Output == Output, P.Failure == Error {
         
         self.action = { execute($0).eraseToAnyPublisher() }
-        
+                
         canExecute
-            .sink { [weak self] in self?.canExecute = $0 }
+            .removeDuplicates()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
+                self?.canExecute = $0
+                self?.isReadyToExecute = true
+            }
             .store(in: &cancellables)
     }
     
@@ -56,17 +68,29 @@ public class InputAction<Input, Output>: ObservableObject {
     /// - Parameter execute: the action itself to run
     public convenience init<P: Publisher>(execute: @escaping (Input) -> P) where P.Output == Output, P.Failure == Error {
         self.init(canExecute: Just(true).eraseToAnyPublisher(), execute: execute)
+        self.canExecute = true // don't wait for RunLoop.main delay
     }
 
     /// execute the action (if enabled) with given `input`.
     ///
     /// This is a special Swift method which can be called as regular function on the object.
     public func callAsFunction(_ input: Input) {
-        guard canExecute && !isExecuting else {
+        // if not ready delay the call until action is ready
+        guard isReadyToExecute else {
+            return $isReadyToExecute
+                .filter { isReady in isReady }
+                .first()
+                .receive(on: RunLoop.main)
+                .sink { [weak self] _ in self?.callAsFunction(input) }
+                .store(in: &cancellables)
+        }
+        
+        guard isEnabled else {
             return
         }
         
         action(input)
+            .receive(on: RunLoop.main)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.isExecuting = true },
                 receiveCompletion: { [weak self] _ in self?.isExecuting = false },
