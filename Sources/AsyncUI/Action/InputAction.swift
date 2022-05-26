@@ -68,7 +68,9 @@ public class InputAction<Input, Output>: ObservableObject {
     /// - Parameter execute: the action itself to run
     public convenience init<P: Publisher>(execute: @escaping (Input) -> P) where P.Output == Output, P.Failure == Error {
         self.init(canExecute: Just(true).eraseToAnyPublisher(), execute: execute)
-        self.canExecute = true // don't wait for RunLoop.main delay
+        // don't wait for RunLoop.main delay
+        self.canExecute = true
+        self.isReadyToExecute = true
     }
 
     /// execute the action (if enabled) with given `input`.

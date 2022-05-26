@@ -25,4 +25,15 @@ class InputActionTests: XCTestCase {
         expectation.assertForOverFulfill = true
         wait(for: [expectation], timeout: 1)
     }
+    
+    func test_execute_actionIsMarkedAsExecuting() {
+        let nonFinishingPublisher = PassthroughSubject<Void, Error>()
+        let action = Action { () -> PassthroughSubject<Void, Error> in
+            return nonFinishingPublisher
+        }
+        
+        action()
+        
+        XCTAssertTrue(action.isExecuting)
+    }
 }
