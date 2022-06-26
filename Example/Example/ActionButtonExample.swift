@@ -6,6 +6,7 @@ class ActionViewModel: ObservableObject {
   @Published var isEnabled = true
   @Published var length = 10
   @Published var randomString = ""
+  @Published var delay: RunLoop.SchedulerTimeType.Stride = 2
   @Published var generateRandomString: InputAction<Void, Void>!
 
   init() {
@@ -14,9 +15,12 @@ class ActionViewModel: ObservableObject {
 
   private func generateString(_ void: Void) -> AnyPublisher<Void, Error> {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    randomString = String((0..<length).map{ _ in letters.randomElement()! })
 
-    return Just(()).setFailureType(to: Error.self).eraseToAnyPublisher()
+    return Just(())
+      .delay(for: delay, scheduler: RunLoop.main)
+      .map { _ in self.randomString = String((0..<self.length).map{ _ in letters.randomElement()! }) }
+      .setFailureType(to: Error.self)
+      .eraseToAnyPublisher()
   }
 }
 
