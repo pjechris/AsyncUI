@@ -36,7 +36,7 @@ public class InputAction<Input, Output>: ObservableObject {
     /// the last result from the action
     @Published public private(set) var result: Result<Output, Error>?
     
-    /// true when the action can be execute and none is currently running
+    /// true when the action can be execute and it is not currently executing
     public var isEnabled: Bool { canExecute && !isExecuting }
     
     private let action: (Input) -> AnyPublisher<Output, Error>
