@@ -24,8 +24,11 @@ dependencies: [
 
 ## Components
 
+Have a look to our [Example](/Example) project to see each component in action. Here is the list of available components:
+
 - [AsyncButton](/Sources/AsyncUI/Button/AsyncButton.swift)
 - [AsyncPublisherButton](/Sources/AsyncUI/Button/AsyncPublisherButton.swift)
+- [ActionButton](/Sources/AsyncUI/Button/ActionButton.swift)
 
 ## License
 This project is released under the MIT License. Please see the LICENSE file for details.
