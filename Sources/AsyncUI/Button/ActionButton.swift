@@ -3,11 +3,11 @@ import Combine
 
 /// A button executing a `Publisher` action on tap
 public struct ActionButton<Label: View, Output>: View {
-  @StateObject var action: InputAction<Void, Output>
+  @ObservedObject var action: InputAction<Void, Output>
   @ViewBuilder public let label: () -> Label
 
   public init(action: InputAction<Void, Output>, @ViewBuilder label: @escaping () -> Label) {
-    self._action = StateObject(wrappedValue: action)
+    self._action = ObservedObject(wrappedValue: action)
     self.label = label
   }
 

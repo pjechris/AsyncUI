@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4912FED42868B75000B20A8D /* ActionButtonExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4912FED32868B75000B20A8D /* ActionButtonExample.swift */; };
 		4972C4C927838A4D000D8B59 /* ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4972C4C827838A4D000D8B59 /* ExampleApp.swift */; };
 		4972C4CD27838A4E000D8B59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4972C4CC27838A4E000D8B59 /* Assets.xcassets */; };
 		4972C4D027838A4E000D8B59 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4972C4CF27838A4E000D8B59 /* Preview Assets.xcassets */; };
@@ -17,11 +18,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4912FED32868B75000B20A8D /* ActionButtonExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonExample.swift; sourceTree = "<group>"; };
+		4912FED52868B81500B20A8D /* AsyncUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AsyncUI; path = ..; sourceTree = "<group>"; };
 		4972C4C527838A4D000D8B59 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4972C4C827838A4D000D8B59 /* ExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleApp.swift; sourceTree = "<group>"; };
 		4972C4CC27838A4E000D8B59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4972C4CF27838A4E000D8B59 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		4972C4D627838A68000D8B59 /* AsyncButton */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AsyncButton; path = ../..; sourceTree = "<group>"; };
 		4972C4DB27838AE0000D8B59 /* AsyncButtonExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncButtonExample.swift; sourceTree = "<group>"; };
 		4972C4DD27838B6C000D8B59 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		4972C4E02783976A000D8B59 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -43,7 +45,7 @@
 		4972C4BC27838A4D000D8B59 = {
 			isa = PBXGroup;
 			children = (
-				4972C4D627838A68000D8B59 /* AsyncButton */,
+				4912FED52868B81500B20A8D /* AsyncUI */,
 				4972C4C727838A4D000D8B59 /* Example */,
 				4972C4C627838A4D000D8B59 /* Products */,
 				4972C4D727838ABC000D8B59 /* Frameworks */,
@@ -64,6 +66,7 @@
 				4972C4E02783976A000D8B59 /* ContentView.swift */,
 				4972C4C827838A4D000D8B59 /* ExampleApp.swift */,
 				4972C4CC27838A4E000D8B59 /* Assets.xcassets */,
+				4912FED32868B75000B20A8D /* ActionButtonExample.swift */,
 				4972C4DA27838AC9000D8B59 /* Button */,
 				4972C4CE27838A4E000D8B59 /* Preview Content */,
 			);
@@ -169,6 +172,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4912FED42868B75000B20A8D /* ActionButtonExample.swift in Sources */,
 				4972C4C927838A4D000D8B59 /* ExampleApp.swift in Sources */,
 				4972C4E327839912000D8B59 /* PublisherButtonExample.swift in Sources */,
 				4972C4DC27838AE0000D8B59 /* AsyncButtonExample.swift in Sources */,
