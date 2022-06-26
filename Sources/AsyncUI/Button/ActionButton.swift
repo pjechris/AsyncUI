@@ -1,35 +1,56 @@
 import SwiftUI
 import Combine
 
-/// A button executing a `Publisher` action on tap
+/// A Button tailored for executing an `InputAction`
 public struct ActionButton<Label: View, Output>: View {
   @ObservedObject var action: InputAction<Void, Output>
   @ViewBuilder public let label: () -> Label
 
+  /// Create a button that display a custom label
+  /// - Parameter action: The action to perform when the user triggers the button
+  /// - Parameter label: A view that describe the purpose of the button’s action
   public init(action: InputAction<Void, Output>, @ViewBuilder label: @escaping () -> Label) {
-    self._action = ObservedObject(wrappedValue: action)
+    self.action = action
     self.label = label
   }
 
   public var body: some View {
-    Button(action: runAction) {
+    Button(action: { action() }) {
       label()
         .modifier(DefaultAsyncStyle())
     }
     .disabled(!action.isEnabled)
     .environment(\.isExecuting, action.isExecuting)
   }
+}
 
-  private func runAction() {
-    action()
-  }
+extension ActionButton {
+    /// Creates a button that generate its label from a localized string key
+    public init(_ titleKey: LocalizedStringKey, action: InputAction<Void, Output>) where Label == Text {
+        self.init(action: action) {
+            Text(titleKey)
+        }
+    }
+
+    /// Creates a button that generate its label from a string
+    public init<S: StringProtocol>(_ title: S, action: InputAction<Void, Output>) where Label == Text {
+        self.init(action: action) {
+            Text(title)
+        }
+    }
 }
 
 struct ActionButton_Previews: PreviewProvider {
   static var previews: some View {
+    var increment = 0
+    let action = Action { () -> Empty in
+      increment += 1
+      return Empty()
+    }
+
     ActionButton(
-      action: InputAction<Void, String> { Just("Nothing").setFailureType(to: Error.self) },
-      label: { Text("test") }
+      action: action,
+      label: { Text("\(increment) clicks") }
     )
     .background(Color.blue)
     .foregroundColor(.black)
