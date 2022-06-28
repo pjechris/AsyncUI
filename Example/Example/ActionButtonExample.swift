@@ -7,10 +7,10 @@ class ActionViewModel: ObservableObject {
   @Published var length = 10
   @Published var randomString = ""
   @Published var delay: RunLoop.SchedulerTimeType.Stride = 2
-  @Published var generateRandomString: InputAction<Void, Void>!
+  @Published var generateRandomString: Action<Void, Void>!
 
   init() {
-    generateRandomString = InputAction(on: self, canExecute: $isEnabled, execute: ActionViewModel.generateString)
+    generateRandomString = Action(on: self, canExecute: $isEnabled, execute: ActionViewModel.generateString)
   }
 
   private func generateString(_ void: Void) -> AnyPublisher<Void, Error> {
