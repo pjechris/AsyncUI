@@ -6,6 +6,7 @@ struct ContentView: View {
     ScrollView {
       asyncButton
       publisherButton
+      actionButton
     }
   }
   
@@ -18,6 +19,12 @@ struct ContentView: View {
   private var publisherButton: some View {
     GroupBox(label: Label("async publisher button", systemImage: "network")) {
       PublisherButtonExample()
+    }
+  }
+
+  private var actionButton: some View {
+    GroupBox(label: Label("action button", systemImage: "network")) {
+      ActionButtonExample()
     }
   }
 }
