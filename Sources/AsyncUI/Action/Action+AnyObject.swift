@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-extension InputAction {
+extension Action {
     /// Create an action using an object function as the action. You generally use it by passing the `execute` argument
     /// as a static reference function.
     /// 

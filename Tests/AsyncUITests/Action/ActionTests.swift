@@ -2,10 +2,10 @@ import XCTest
 import AsyncUI
 import Combine
 
-class InputActionTests: XCTestCase {
+class ActionTests: XCTestCase {
     func test_canExecute_notDefinedAtInit_returnTrue() {
         let action = Action {
-            Empty()
+            Empty<Void, Error>()
         }
         
         XCTAssertTrue(action.canExecute)
